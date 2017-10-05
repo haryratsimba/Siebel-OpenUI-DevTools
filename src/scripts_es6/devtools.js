@@ -9,3 +9,7 @@ backgroundPageConnection.postMessage({
     name: 'initConnection',
     tabId: chrome.devtools.inspectedWindow.tabId
 });
+
+backgroundPageConnection.onMessage.addListener(function (message) {
+    console.log(message);
+});

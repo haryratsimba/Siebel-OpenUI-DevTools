@@ -1,4 +1,4 @@
-import SiebViewWrapper from './models/SiebViewWrapper';
+import SiebViewWrapper from './models/siebviewwrapper';
 
 const ClientListener = new(function() {
 
@@ -27,12 +27,12 @@ const ClientListener = new(function() {
     // to get the Siebel global variable and pass it as an DOM event since content page and script share the DOM access.
     this.initialize = function() {
         window.addEventListener('load', () => {
-            this.listenForSiebelLoad();
-            this.listenForSWEViewUpdate();
+            this.listenToSiebelLoad();
+            this.listenToSWEViewUpdate();
         });
     }
 
-    this.listenForSiebelLoad = async function() {
+    this.listenToSiebelLoad = async function() {
         try {
             let activeView = await getSiebelApp();
 
@@ -42,7 +42,7 @@ const ClientListener = new(function() {
         }
     };
 
-    this.listenForSWEViewUpdate = async function() {
+    this.listenToSWEViewUpdate = async function() {
         let observer = new MutationObserver(async mutations => {
             console.log('swe DOM has changed');
 

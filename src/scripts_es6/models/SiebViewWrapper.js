@@ -1,4 +1,4 @@
-import SiebAppletWrapper from './SiebAppletWrapper';
+import SiebAppletWrapper from './siebappletwrapper';
 
 export default class SiebViewWrapper {
 
