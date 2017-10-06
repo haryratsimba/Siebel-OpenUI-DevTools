@@ -24,6 +24,10 @@ body,
     margin-bottom: 18px;
 }
 
+.panel-header h2 {
+    color: #4B77BE;
+}
+
 details summary {
     outline: none;
 }

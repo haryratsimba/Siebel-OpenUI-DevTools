@@ -11,19 +11,17 @@ var gulp = require('gulp'),
     rollup = require('gulp-rollup'),
     zip = require('gulp-zip');
 
-/**
+/*
  * Watch ES6 JS files changes.
  */
 gulp.task('watch', ['build:all'], function() {
     gulp.watch('src/scripts_es6/**/*.js', ['build']);
 });
 
-/**
+/*
  * Build ES6 JS files into ES5 with Babel.
  */
-gulp.task('build:all', function() {
-    // TODO : content-script + bg + dev-tools files will be bundled with their dependencies using rollupjs
-    // Just run each file tasks sequentially, eg : run build:content-script, then build:background-script, etc.
+gulp.task('build:global', function() {
     return gulp.src(['src/scripts_es6/**/*.js', '!src/scripts_es6/lib/', '!src/scripts_es6/lib/**'])
         .pipe(babel({
             presets: ['es2015']
@@ -34,11 +32,10 @@ gulp.task('build:all', function() {
         .pipe(gulp.dest('./src/scripts'));
 });
 
-// https://lazamar.github.io/up-and-running-with-rollup-js-in-gulp-grunt-and-native-js-api/
-/**
+/*
  * Bundle the injected + content-script with dependencies using rollupjs, into a single file provided in the manifest.
  */
-gulp.task('build:content-injected-script', function() {
+gulp.task('build:content-injected-script', ['build:global'], function() {
     gulp.src([
             './src/scripts_es6/client-listener.js'
         ])
@@ -60,7 +57,12 @@ gulp.task('build:content-injected-script', function() {
         .pipe(gulp.dest('./src/scripts'));
 });
 
-/**
+/*
+ * Build all files : babelify + bundle
+ */
+gulp.task('build', ['build:content-injected-script']);
+
+/*
  * Package the src in the src/dist/ folder.
  */
 gulp.task('dist', function() {
