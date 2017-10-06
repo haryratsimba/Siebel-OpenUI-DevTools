@@ -11,17 +11,27 @@ window.PanelApp = new function () {
         // Keep the siebel object
         this.siebelApp = siebelApp;
 
-        this.panelApp = new Vue({
-            el: '#app',
-            data: {
-                viewName: siebelApp.name,
-                applets: siebelApp.applets,
-                controls: siebelApp.controls,
-                recordSet: siebelApp.recordSet
-            }
-        });
+        if (!this.panelAppVm) {
+            this.panelAppVm = new Vue({
+                el: '#app',
+                data: populateModel({}, siebelApp),
+                methods: {
+                    displayAppletControls: function displayAppletControls(applet) {
+                        this.controls = applet.controls;
+                        this.recordSet = JSON.stringify(applet.recordSet, null, 2);
+                    }
+                },
+                computed: {
+                    appExists: function appExists() {
+                        return typeof this.viewName != 'undefined';
+                    }
+                }
+            });
+        } else {
+            populateModel(this.panelAppVm, siebelApp);
+        }
 
-        return this.panelApp;
+        return this.panelAppVm;
     };
 
     /**
@@ -29,7 +39,16 @@ window.PanelApp = new function () {
      * @param {object} siebelApp an instance of wrappers/SiebViewWrapper.
      * @return {boolean} true if the siebelApp object in parameter is different than the one used to create the panel.
      */
-    this.isAppDifferent = function (siebelApp) {
-        return !this.siebelApp || siebelApp.GetName() != this.siebelApp.GetName();
+    this.isAnotherViewApp = function (siebelApp) {
+        return !this.siebelApp || siebelApp.name != this.siebelApp.name;
     };
+
+    function populateModel(model, siebelApp) {
+        model.viewName = siebelApp.name;
+        model.applets = siebelApp.applets;
+        model.controls = null;
+        model.recordSet = null;
+
+        return model;
+    }
 }();

@@ -36,12 +36,8 @@ backgroundPageConnection.onMessage.addListener(function (cachedSiebelApp) {
 
     if (panelWindow) {
         var PanelApp = panelWindow.PanelApp;
-        if (PanelApp.isAppDifferent(cachedSiebelApp)) {
+        if (PanelApp.isAnotherViewApp(cachedSiebelApp)) {
             PanelApp.createPanelApp(cachedSiebelApp);
         }
-
-        var div = panelWindow.document.createElement('div');
-        div.innerHTML = JSON.stringify(cachedSiebelApp);
-        panelWindow.document.body.appendChild(div);
     }
 });

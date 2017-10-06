@@ -1,7 +1,27 @@
 html, body {
-    height: 100%;
     padding: 0;
     margin: 0;
+}
+
+html,
+body,
+#app,
+.container.devtools-container,
+.container.devtools-container .row {
+    height: 100%;
+}
+
+.col.devtools-panel {
+    max-width: 50%;
+}
+
+.devtools-panel .devtools-subpanel {
+    height: 50%;
+    overflow-y: auto;
+}
+
+.panel-header {
+    margin-bottom: 18px;
 }
 
 details summary {
@@ -10,13 +30,4 @@ details summary {
 
 details ul {
     margin-left: 18px;
-}
-
-.container.devtools-container,
-.container.devtools-container .row {
-    height: 100%;
-}
-
-.devtools-panel .devtools-subpanel {
-    height: 50%;
 }

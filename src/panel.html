@@ -5,78 +5,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Siebel OpenUI devtools</title>
+    <link rel="stylesheet" href="css/lib/bootstrap.min.css">
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/libs/milligram.min.css">
 </head>
 
 <body>
-    <div id="app" class="container devtools-container">
-        <div class="row">
-            <div class="column devtools-panel">
-                <div class="panel-header">
-                    <h3>Applets</h3>
-                </div>
-                <div class="panel-applet" v-for="applet in applets">
-                    <details>
-                        <summary>{{applet.name}}</summary>
-                        <ul>
-                            <li>FullId : #{{applet.fullId}}</li>
-                            <li><a href="#">See controls</a></li>
-                            <li><a href="#">Inspect</a></li>
-                        </ul>
-                    </details>
-                </div>
-            </div>
-            <div class="column devtools-panel">
-                <div class="devtools-subpanel">
-                    <div class="panel-header">
-                        <h3>Controls</h3></div>
-                    <div>
-                        <details>
-                            <summary>Control</summary>
-                            <ul>
-                                <li>Control input name</li>
-                                <li>Control display name</li>
-                                <li><a href="#">Inspect</a></li>
-                            </ul>
-                        </details>
-                        <details>
-                            <summary>Control</summary>
-                            <ul>
-                                <li>Control input name</li>
-                                <li>Control display name</li>
-                                <li><a href="#">Inspect</a></li>
-                            </ul>
-                        </details>
-                        <details>
-                            <summary>Control</summary>
-                            <ul>
-                                <li>Control input name</li>
-                                <li>Control display name</li>
-                                <li><a href="#">Inspect</a></li>
-                            </ul>
-                        </details>
+    <div id="app">
+        <template v-if="appExists">
+            <div class="container devtools-container">
+                <div class="row">
+                    <div class="col devtools-panel">
+                        <div class="devtools-subpanel">
+                            <div class="panel-header">
+                                <h2>Applets</h2>
+                            </div>
+                            <div class="panel-applet" v-for="applet in applets">
+                                <details>
+                                    <summary>{{applet.name}}</summary>
+                                    <ul>
+                                        <li>FullId : #{{applet.fullId}}</li>
+                                        <li><a href="#" @click="displayAppletControls(applet)">See controls</a></li>
+                                        <li><a href="#">Inspect</a></li>
+                                    </ul>
+                                </details>
+                            </div>
+                        </div>
+                        <div class="devtools-subpanel">
+                            <div class="jumbotron">
+                                <h1 class="display-4">{{viewName}}</h1>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="devtools-subpanel">
-                    <div class="panel-header">
-                        <h3>Record set</h3></div>
-                    <div>
-                        <pre><code>{
-                            "name": "AM Find My Training View",
-                            "applets": {
-                                "AM Find Training Details Applet": {
-                                    "id": "1",
-                                    "fullId": "S_A1",
-                                    "name": "AM Find Training Details Applet",
-                                    "recordSet": []
-                                }
-                            }
-                        }</code></pre>
+                    <div class="col devtools-panel">
+                        <div class="devtools-subpanel">
+                            <div class="panel-header">
+                                <h2>Controls</h2></div>
+                            <div>
+                                <details v-for="control in controls">
+                                    <summary>{{control.name}}</summary>
+                                    <ul>
+                                        <li>Input name : {{control.inputName}}</li>
+                                        <li>Display name : {{control.displayName}}</li>
+                                        <li><a href="#">Inspect</a></li>
+                                    </ul>
+                                </details>
+                            </div>
+                        </div>
+                        <div class="devtools-subpanel">
+                            <div class="panel-header">
+                                <h2>Record set</h2></div>
+                            <div>
+                                <pre><code>{{recordSet}}</code></pre>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </template>
     </div>
 
     <script src="scripts/lib/vue.js"></script>
