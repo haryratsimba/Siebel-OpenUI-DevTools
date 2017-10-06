@@ -1,0 +1,22 @@
+html, body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+details summary {
+    outline: none;
+}
+
+details ul {
+    margin-left: 18px;
+}
+
+.container.devtools-container,
+.container.devtools-container .row {
+    height: 100%;
+}
+
+.devtools-panel .devtools-subpanel {
+    height: 50%;
+}

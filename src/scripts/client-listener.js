@@ -437,12 +437,12 @@ var ClientListener = new function () {
         var _this = this;
 
         window.addEventListener('load', function () {
-            _this.listenForSiebelLoad();
-            _this.listenForSWEViewUpdate();
+            _this.listenToSiebelLoad();
+            _this.listenToSWEViewUpdate();
         });
     };
 
-    this.listenForSiebelLoad = async function () {
+    this.listenToSiebelLoad = async function () {
         try {
             var activeView = await getSiebelApp();
 
@@ -452,7 +452,7 @@ var ClientListener = new function () {
         }
     };
 
-    this.listenForSWEViewUpdate = async function () {
+    this.listenToSWEViewUpdate = async function () {
         var _this2 = this;
 
         var observer = new MutationObserver(async function (mutations) {

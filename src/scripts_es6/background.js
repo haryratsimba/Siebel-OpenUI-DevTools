@@ -17,35 +17,43 @@ const BackgroundScript = new(function() {
     const connectionManager = {};
 
     this.initialize = function() {
-        this.listenToDevtoolsConnectEvents();
+        this.listenToDevtoolsEvents();
         this.listenToContentScriptEvent();
     };
 
-    this.listenToDevtoolsConnectEvents = function() {
+    this.listenToDevtoolsEvents = function() {
         // Listen for a connection creation from devtools and save this connection
         chrome.runtime.onConnect.addListener((port) => {
 
             let onDevToolsConnectionListener = (message, sender, sendResponse) => {
                 // The tab ID is provided in Devtools message because the background page has no tab access
-                if (message.name === "initConnection" && message.tabId != null) {
-                    let tabID = message.tabId;
-
-                    if (!connectionManager[tabID]) {
-                        connectionManager[tabID] = {};
-                    }
-
-                    // Update the port. The connection may have been already created if a cached siebel app
-                    // was emitted from the content-script
-                    let portConnection = (connectionManager[tabID].port = port);
-
-                    // If a Siebel app is already cached for the current tab, forward it to the new created devtools
-                    let cachedSibelApp = connectionManager[tabID].cachedSiebelApp;
-                    if (cachedSibelApp) {
-                        portConnection.postMessage(cachedSibelApp);
-                    }
-
+                if (message.tabId == null) {
                     return;
                 }
+
+                let tabID = message.tabId;
+                switch (message.name) {
+                    // When the devtools is open
+                    case 'initConnection':
+                        if (!connectionManager[tabID]) {
+                            connectionManager[tabID] = {};
+                        }
+
+                        // Update the port. The connection may have been already created if a cached siebel app
+                        // was emitted from the content-script
+                        connectionManager[tabID].port = port;
+                        break;
+                    // When the devtools panel has focus
+                    case 'requestSiebelAppInstance':
+                        // If a Siebel app is already cached for the current tab, forward it to the new created devtools
+                        let tabConnection = connectionManager[tabID];
+                        if (tabConnection && tabConnection.cachedSiebelApp) {
+                            tabConnection.port.postMessage(tabConnection.cachedSiebelApp);
+                        }
+                        break;
+                }
+
+                return;
             };
 
             // Listen to connection message sent from the DevTools page, then save the connection
@@ -70,7 +78,7 @@ const BackgroundScript = new(function() {
                 connectionManager[tabId].cachedSiebelApp = siebelApp;
 
                 if (connectionManager[tabId].port) {
-                    connectionManager[tabId].port.postMessage(request);
+                    connectionManager[tabId].port.postMessage(siebelApp);
                 } else {
                     console.log("Devtools port is not initialize yet");
                 }

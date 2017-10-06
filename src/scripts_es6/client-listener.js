@@ -1,4 +1,4 @@
-import SiebViewWrapper from './models/siebviewwrapper';
+import SiebViewWrapper from './wrappers/siebviewwrapper';
 
 const ClientListener = new(function() {
 

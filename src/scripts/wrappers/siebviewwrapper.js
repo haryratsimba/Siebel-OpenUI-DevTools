@@ -8,9 +8,9 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _SiebAppletWrapper = require('./SiebAppletWrapper');
+var _siebappletwrapper = require('./siebappletwrapper');
 
-var _SiebAppletWrapper2 = _interopRequireDefault(_SiebAppletWrapper);
+var _siebappletwrapper2 = _interopRequireDefault(_siebappletwrapper);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -61,7 +61,7 @@ var SiebViewWrapper = function () {
                         name = _step$value[0],
                         siebApplet = _step$value[1];
 
-                    var applet = _SiebAppletWrapper2.default.wrap(siebApplet);
+                    var applet = _siebappletwrapper2.default.wrap(siebApplet);
                     wrapper.applets[name] = applet;
                 }
             } catch (err) {
