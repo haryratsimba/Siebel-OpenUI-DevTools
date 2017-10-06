@@ -25,7 +25,7 @@
                                     <ul>
                                         <li>FullId : #{{applet.fullId}}</li>
                                         <li><a href="#" @click="displayAppletControls(applet)">See controls</a></li>
-                                        <li><a href="#">Inspect</a></li>
+                                        <li><a href="#" @click="inspectApplet(applet)">Inspect</a></li>
                                     </ul>
                                 </details>
                             </div>
@@ -46,7 +46,7 @@
                                     <ul>
                                         <li>Input name : {{control.inputName}}</li>
                                         <li>Display name : {{control.displayName}}</li>
-                                        <li><a href="#">Inspect</a></li>
+                                        <li><a href="#" @click="inspectControl(control)">Inspect</a></li>
                                     </ul>
                                 </details>
                             </div>

@@ -9,7 +9,7 @@ window.PanelApp = new(function() {
         // Keep the siebel object
         this.siebelApp = siebelApp;
 
-        if(!this.panelAppVm) {
+        if (!this.panelAppVm) {
             this.panelAppVm = new Vue({
                 el: '#app',
                 data: populateModel({}, siebelApp),
@@ -17,6 +17,14 @@ window.PanelApp = new(function() {
                     displayAppletControls(applet) {
                         this.controls = applet.controls;
                         this.recordSet = JSON.stringify(applet.recordSet, null, 2);
+                    },
+                    inspectApplet(applet) {
+                        chrome.devtools.inspectedWindow.eval(`inspect($("#${applet.fullId}"))`, {useContentScriptContext:true});
+                    },
+                    inspectControl(control) {
+                        chrome.devtools.inspectedWindow.eval(`inspect($('${control.cssSelector}'))`, {useContentScriptContext:true}, (result, isException) => {
+                            console.log(result, isException);
+                        });
                     }
                 },
                 computed: {

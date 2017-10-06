@@ -19,6 +19,14 @@ window.PanelApp = new function () {
                     displayAppletControls: function displayAppletControls(applet) {
                         this.controls = applet.controls;
                         this.recordSet = JSON.stringify(applet.recordSet, null, 2);
+                    },
+                    inspectApplet: function inspectApplet(applet) {
+                        chrome.devtools.inspectedWindow.eval('inspect($("#' + applet.fullId + '"))', { useContentScriptContext: true });
+                    },
+                    inspectControl: function inspectControl(control) {
+                        chrome.devtools.inspectedWindow.eval('inspect($(\'' + control.cssSelector + '\'))', { useContentScriptContext: true }, function (result, isException) {
+                            console.log(result, isException);
+                        });
                     }
                 },
                 computed: {

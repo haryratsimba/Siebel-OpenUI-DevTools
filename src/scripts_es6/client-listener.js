@@ -1,5 +1,10 @@
 import SiebViewWrapper from './wrappers/siebviewwrapper';
 
+/**
+ * Listen for View changes and send a Siebel app wrapper to the content-script using DOM events.
+ * In fact, its not possible to send objects which contains a window instance for security reasons,
+ * thats why it send a wrapper of the Siebel app.
+ */
 const ClientListener = new(function() {
 
     /**
