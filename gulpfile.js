@@ -4,6 +4,7 @@
  * and it could lead to conflict issues.
  */
 var gulp = require('gulp'),
+    addsrc = require('gulp-add-src'),
     sourcemaps = require('gulp-sourcemaps'),
     babel = require('gulp-babel'),
     rollupBabel = require('rollup-plugin-babel'),
@@ -23,10 +24,12 @@ gulp.task('watch', ['build:all'], function() {
 gulp.task('build:all', function() {
     // TODO : content-script + bg + dev-tools files will be bundled with their dependencies using rollupjs
     // Just run each file tasks sequentially, eg : run build:content-script, then build:background-script, etc.
-    return gulp.src(['src/scripts_es6/**/*.js'])
+    return gulp.src(['src/scripts_es6/**/*.js', '!src/scripts_es6/lib/', '!src/scripts_es6/lib/**'])
         .pipe(babel({
             presets: ['es2015']
         }))
+        /* Don't babelify lib folder */
+        .pipe(addsrc(['./src/scripts_es6/lib/**'], { base: './src/scripts_es6/'}))
         .on('error', console.error.bind(console))
         .pipe(gulp.dest('./src/scripts'));
 });

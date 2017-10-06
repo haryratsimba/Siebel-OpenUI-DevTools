@@ -10,31 +10,17 @@
 </head>
 
 <body>
-    <div class="container devtools-container">
+    <div id="app" class="container devtools-container">
         <div class="row">
             <div class="column devtools-panel">
-                <div class="panel-header"><h3>Applets</h3></div>
-                <div>
+                <div class="panel-header">
+                    <h3>Applets</h3>
+                </div>
+                <div class="panel-applet" v-for="applet in applets">
                     <details>
-                        <summary>Applet</summary>
+                        <summary>{{applet.name}}</summary>
                         <ul>
-                            <li>Applet ID</li>
-                            <li><a href="#">See controls</a></li>
-                            <li><a href="#">Inspect</a></li>
-                        </ul>
-                    </details>
-                    <details>
-                        <summary>Applet</summary>
-                        <ul>
-                            <li>Applet ID</li>
-                            <li><a href="#">See controls</a></li>
-                            <li><a href="#">Inspect</a></li>
-                        </ul>
-                    </details>
-                    <details>
-                        <summary>Applet</summary>
-                        <ul>
-                            <li>Applet ID</li>
+                            <li>FullId : #{{applet.fullId}}</li>
                             <li><a href="#">See controls</a></li>
                             <li><a href="#">Inspect</a></li>
                         </ul>
@@ -43,12 +29,13 @@
             </div>
             <div class="column devtools-panel">
                 <div class="devtools-subpanel">
-                    <div class="panel-header"><h3>Controls</h3></div>
+                    <div class="panel-header">
+                        <h3>Controls</h3></div>
                     <div>
                         <details>
                             <summary>Control</summary>
                             <ul>
-                                <li>Control name</li>
+                                <li>Control input name</li>
                                 <li>Control display name</li>
                                 <li><a href="#">Inspect</a></li>
                             </ul>
@@ -56,7 +43,7 @@
                         <details>
                             <summary>Control</summary>
                             <ul>
-                                <li>Control name</li>
+                                <li>Control input name</li>
                                 <li>Control display name</li>
                                 <li><a href="#">Inspect</a></li>
                             </ul>
@@ -64,7 +51,7 @@
                         <details>
                             <summary>Control</summary>
                             <ul>
-                                <li>Control name</li>
+                                <li>Control input name</li>
                                 <li>Control display name</li>
                                 <li><a href="#">Inspect</a></li>
                             </ul>
@@ -72,7 +59,8 @@
                     </div>
                 </div>
                 <div class="devtools-subpanel">
-                    <div class="panel-header"><h3>Record set</h3></div>
+                    <div class="panel-header">
+                        <h3>Record set</h3></div>
                     <div>
                         <pre><code>{
                             "name": "AM Find My Training View",
@@ -91,7 +79,8 @@
         </div>
     </div>
 
-    <script src="scripts/panel.js"></script>
+    <script src="scripts/lib/vue.js"></script>
+    <script src="scripts/app/app.js"></script>
 </body>
 
 </html>

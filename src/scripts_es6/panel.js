@@ -1,1 +1,0 @@
-window.globalVariable = 10;

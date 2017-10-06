@@ -12,7 +12,7 @@ var backgroundPageConnection = chrome.runtime.connect({
     name: "panel"
 });
 
-chrome.devtools.panels.create('Siebel OpenUI', 'img/devtools.png', 'panel.html', function (panel) {
+chrome.devtools.panels.create('Siebel OpenUI', '', 'panel.html', function (panel) {
     // Keep the panel window instance when the devtools tab has focused
     panel.onShown.addListener(function (pwindow) {
         // When the panel has focused, request the SiebelApp cached object to update the view
@@ -31,15 +31,17 @@ backgroundPageConnection.postMessage({
     tabId: chrome.devtools.inspectedWindow.tabId
 });
 
-backgroundPageConnection.onMessage.addListener(function (message) {
-    console.log(message);
+backgroundPageConnection.onMessage.addListener(function (cachedSiebelApp) {
+    console.log(cachedSiebelApp);
 
     if (panelWindow) {
-        // Panel global variable defined in panel.js
-        console.log(panelWindow.globalVariable);
+        var PanelApp = panelWindow.PanelApp;
+        if (PanelApp.isAppDifferent(cachedSiebelApp)) {
+            PanelApp.createPanelApp(cachedSiebelApp);
+        }
 
         var div = panelWindow.document.createElement('div');
-        div.innerHTML = JSON.stringify(message);
+        div.innerHTML = JSON.stringify(cachedSiebelApp);
         panelWindow.document.body.appendChild(div);
     }
 });
