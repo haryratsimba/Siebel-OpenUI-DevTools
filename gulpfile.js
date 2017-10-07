@@ -14,7 +14,7 @@ var gulp = require('gulp'),
 /*
  * Watch ES6 JS files changes.
  */
-gulp.task('watch', ['build:all'], function() {
+gulp.task('watch', ['build'], function() {
     gulp.watch('src/scripts_es6/**/*.js', ['build']);
 });
 
