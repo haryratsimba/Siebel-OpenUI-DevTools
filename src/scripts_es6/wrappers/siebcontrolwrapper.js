@@ -8,7 +8,10 @@ export default class SiebControlWrapper {
         wrapper.inputName = siebAppControl.GetInputName();
         wrapper.fieldName = siebAppControl.GetFieldName();
 
-        wrapper.cssSelector = `[name="${wrapper.inputName}"], [aria-label="${wrapper.displayName}"]`;
+        wrapper.cssSelectors = {
+            inputName: `[name="${wrapper.inputName}"]`,
+            fieldName: `[aria-label="${wrapper.displayName}"]`
+        };
 
         return wrapper;
     }
@@ -16,8 +19,8 @@ export default class SiebControlWrapper {
     /**
      * CSS selector which allow to target the control HTML element (ex : [name=controlName], #controlID)
      */
-    getCSSSelector() {
-        this.cssSelector;
+    getCSSSelectors() {
+        this.cssSelectors;
     }
 
     getName() {

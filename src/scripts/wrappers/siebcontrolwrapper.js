@@ -14,14 +14,14 @@ var SiebControlWrapper = function () {
     }
 
     _createClass(SiebControlWrapper, [{
-        key: "getCSSSelector",
+        key: "getCSSSelectors",
 
 
         /**
          * CSS selector which allow to target the control HTML element (ex : [name=controlName], #controlID)
          */
-        value: function getCSSSelector() {
-            this.cssSelector;
+        value: function getCSSSelectors() {
+            this.cssSelectors;
         }
     }, {
         key: "getName",
@@ -53,7 +53,10 @@ var SiebControlWrapper = function () {
             wrapper.inputName = siebAppControl.GetInputName();
             wrapper.fieldName = siebAppControl.GetFieldName();
 
-            wrapper.cssSelector = "[name=\"" + wrapper.inputName + "\"], [aria-label=\"" + wrapper.displayName + "\"]";
+            wrapper.cssSelectors = {
+                inputName: "[name=\"" + wrapper.inputName + "\"]",
+                fieldName: "[aria-label=\"" + wrapper.displayName + "\"]"
+            };
 
             return wrapper;
         }

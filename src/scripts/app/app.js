@@ -24,8 +24,11 @@ window.PanelApp = new function () {
                         chrome.devtools.inspectedWindow.eval('inspect($("#' + applet.fullId + '"))', { useContentScriptContext: true });
                     },
                     inspectControl: function inspectControl(control) {
-                        chrome.devtools.inspectedWindow.eval('inspect($(\'' + control.cssSelector + '\'))', { useContentScriptContext: true }, function (result, isException) {
-                            console.log(result, isException);
+                        // Try to get the input by its name first, then by its label
+                        chrome.devtools.inspectedWindow.eval('inspect($(\'' + control.cssSelectors.inputName + '\'))', { useContentScriptContext: true }, function (result, isException) {
+                            if (isException) {
+                                chrome.devtools.inspectedWindow.eval('inspect($(\'' + control.cssSelectors.fieldName + '\'))', { useContentScriptContext: true });
+                            }
                         });
                     }
                 },
