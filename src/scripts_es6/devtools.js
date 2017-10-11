@@ -30,8 +30,6 @@ backgroundPageConnection.postMessage({
 });
 
 backgroundPageConnection.onMessage.addListener(function(cachedSiebelApp) {
-    console.log(cachedSiebelApp);
-
     if (panelWindow) {
         let PanelApp = panelWindow.PanelApp;
         if (PanelApp.isAnotherViewApp(cachedSiebelApp)) {

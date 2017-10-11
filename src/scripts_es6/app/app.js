@@ -19,13 +19,19 @@ window.PanelApp = new(function() {
                         this.recordSet = JSON.stringify(applet.recordSet, null, 2);
                     },
                     inspectApplet(applet) {
-                        chrome.devtools.inspectedWindow.eval(`inspect($("#${applet.fullId}"))`, {useContentScriptContext:true});
+                        chrome.devtools.inspectedWindow.eval(`inspect($("#${applet.fullId}"))`, {
+                            useContentScriptContext: true
+                        });
                     },
                     inspectControl(control) {
                         // Try to get the input by its name first, then by its label
-                        chrome.devtools.inspectedWindow.eval(`inspect($('${control.cssSelectors.inputName}'))`, {useContentScriptContext:true}, (result, isException) => {
-                            if(isException) {
-                                chrome.devtools.inspectedWindow.eval(`inspect($('${control.cssSelectors.fieldName}'))`, {useContentScriptContext:true});
+                        chrome.devtools.inspectedWindow.eval(`inspect($('${control.cssSelectors.inputName}'))`, {
+                            useContentScriptContext: true
+                        }, (result, isException) => {
+                            if (isException) {
+                                chrome.devtools.inspectedWindow.eval(`inspect($('${control.cssSelectors.fieldName}'))`, {
+                                    useContentScriptContext: true
+                                });
                             }
                         });
                     }
@@ -33,6 +39,15 @@ window.PanelApp = new(function() {
                 computed: {
                     appExists() {
                         return typeof this.viewName != 'undefined';
+                    },
+                    filteredApplets() {
+                        let filtered = [];
+                        for (let [appletName, applet] of Object.entries(this.applets)) {
+                            if (applet.fullId.toUpperCase().includes(this.appletQuery.toUpperCase())) {
+                                filtered.push(applet);
+                            }
+                        }
+                        return filtered;
                     }
                 }
             });
@@ -57,6 +72,8 @@ window.PanelApp = new(function() {
         model.applets = siebelApp.applets;
         model.controls = null;
         model.recordSet = null;
+        model.appletQuery = '';
+        model.controlQuery = '';
 
         return model;
     }

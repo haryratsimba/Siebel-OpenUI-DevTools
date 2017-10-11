@@ -29,7 +29,6 @@ const ContentScript = new(function() {
     this.listenToClientListenerEvent = function() {
         document.body.addEventListener('onSiebAppLoaded', e => {
             if(e.target.getAttribute('id') === MESSAGING_EVENT_TARGET_ID) {
-                console.log('send message : ', e.detail);
                 chrome.runtime.sendMessage(e.detail);
             }
         }, true);

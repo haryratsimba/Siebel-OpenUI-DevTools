@@ -464,8 +464,6 @@ var ClientListener = new function () {
         var _this2 = this;
 
         var observer = new MutationObserver(async function (mutations) {
-            console.log('swe DOM has changed');
-
             var activeView = await getSiebelApp();
             _this2.sendEventToContentScript(activeView);
         });

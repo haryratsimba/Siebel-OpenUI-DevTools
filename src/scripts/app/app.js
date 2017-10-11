@@ -1,5 +1,7 @@
 'use strict';
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 // Export the panel app into the global window, to be accessible from the devtools script
 window.PanelApp = new function () {
 
@@ -21,13 +23,19 @@ window.PanelApp = new function () {
                         this.recordSet = JSON.stringify(applet.recordSet, null, 2);
                     },
                     inspectApplet: function inspectApplet(applet) {
-                        chrome.devtools.inspectedWindow.eval('inspect($("#' + applet.fullId + '"))', { useContentScriptContext: true });
+                        chrome.devtools.inspectedWindow.eval('inspect($("#' + applet.fullId + '"))', {
+                            useContentScriptContext: true
+                        });
                     },
                     inspectControl: function inspectControl(control) {
                         // Try to get the input by its name first, then by its label
-                        chrome.devtools.inspectedWindow.eval('inspect($(\'' + control.cssSelectors.inputName + '\'))', { useContentScriptContext: true }, function (result, isException) {
+                        chrome.devtools.inspectedWindow.eval('inspect($(\'' + control.cssSelectors.inputName + '\'))', {
+                            useContentScriptContext: true
+                        }, function (result, isException) {
                             if (isException) {
-                                chrome.devtools.inspectedWindow.eval('inspect($(\'' + control.cssSelectors.fieldName + '\'))', { useContentScriptContext: true });
+                                chrome.devtools.inspectedWindow.eval('inspect($(\'' + control.cssSelectors.fieldName + '\'))', {
+                                    useContentScriptContext: true
+                                });
                             }
                         });
                     }
@@ -35,6 +43,39 @@ window.PanelApp = new function () {
                 computed: {
                     appExists: function appExists() {
                         return typeof this.viewName != 'undefined';
+                    },
+                    filteredApplets: function filteredApplets() {
+                        var filtered = [];
+                        var _iteratorNormalCompletion = true;
+                        var _didIteratorError = false;
+                        var _iteratorError = undefined;
+
+                        try {
+                            for (var _iterator = Object.entries(this.applets)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                                var _step$value = _slicedToArray(_step.value, 2),
+                                    appletName = _step$value[0],
+                                    applet = _step$value[1];
+
+                                if (applet.fullId.toUpperCase().includes(this.appletQuery.toUpperCase())) {
+                                    filtered.push(applet);
+                                }
+                            }
+                        } catch (err) {
+                            _didIteratorError = true;
+                            _iteratorError = err;
+                        } finally {
+                            try {
+                                if (!_iteratorNormalCompletion && _iterator.return) {
+                                    _iterator.return();
+                                }
+                            } finally {
+                                if (_didIteratorError) {
+                                    throw _iteratorError;
+                                }
+                            }
+                        }
+
+                        return filtered;
                     }
                 }
             });
@@ -59,6 +100,8 @@ window.PanelApp = new function () {
         model.applets = siebelApp.applets;
         model.controls = null;
         model.recordSet = null;
+        model.appletQuery = '';
+        model.controlQuery = '';
 
         return model;
     }

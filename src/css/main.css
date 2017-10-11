@@ -18,6 +18,7 @@ body,
 .devtools-panel .devtools-subpanel {
     height: 50%;
     overflow-y: auto;
+    margin-top: 10px;
 }
 
 .panel-header {
@@ -26,6 +27,14 @@ body,
 
 .panel-header h2 {
     color: #4B77BE;
+}
+
+.panel-applet input {
+    margin-bottom: 10px;
+}
+
+.panel-applet input::-webkit-input-placeholder {
+   font-style: italic;
 }
 
 details summary {

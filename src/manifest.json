@@ -1,7 +1,7 @@
 {
     "name": "sieb-openui-devtools",
     "description": "Siebel OpenUI devtools utility (non-official)",
-    "version": "1.0",
+    "version": "1.0.0",
     "manifest_version": 2,
     "minimum_chrome_version": "37",
     "icons": {

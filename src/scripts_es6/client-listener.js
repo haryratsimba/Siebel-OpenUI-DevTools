@@ -49,8 +49,6 @@ const ClientListener = new(function() {
 
     this.listenToSWEViewUpdate = async function() {
         let observer = new MutationObserver(async mutations => {
-            console.log('swe DOM has changed');
-
             let activeView = await getSiebelApp();
             this.sendEventToContentScript(activeView);
         });

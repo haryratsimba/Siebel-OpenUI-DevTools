@@ -19,15 +19,18 @@
                             <div class="panel-header">
                                 <h2>Applets</h2>
                             </div>
-                            <div class="panel-applet" v-for="applet in applets">
-                                <details>
-                                    <summary>{{applet.name}}</summary>
-                                    <ul>
-                                        <li>FullId : #{{applet.fullId}}</li>
-                                        <li><a href="#" @click="displayAppletControls(applet)">See controls</a></li>
-                                        <li><a href="#" @click="inspectApplet(applet)">Inspect</a></li>
-                                    </ul>
-                                </details>
+                            <div class="panel-applet">
+                                <input type="text" v-model="appletQuery" class="form-control" placeholder="Search by id, eg: S_A1">
+                                <div>
+                                    <details v-for="applet in filteredApplets">
+                                        <summary>{{applet.name}}</summary>
+                                        <ul>
+                                            <li>FullId : <span class="badge badge-primary">#{{applet.fullId}}</span></li>
+                                            <li><a href="#" @click="displayAppletControls(applet)">See controls</a></li>
+                                            <li><a href="#" @click="inspectApplet(applet)">Inspect</a></li>
+                                        </ul>
+                                    </details>
+                                </div>
                             </div>
                         </div>
                         <div class="devtools-subpanel">
@@ -39,13 +42,14 @@
                     <div class="col devtools-panel">
                         <div class="devtools-subpanel">
                             <div class="panel-header">
-                                <h2>Controls</h2></div>
+                                <h2>Controls</h2>
+                            </div>
                             <div>
                                 <details v-for="control in controls">
                                     <summary>{{control.name}}</summary>
                                     <ul>
-                                        <li>Input name : {{control.inputName}}</li>
-                                        <li>Display name : {{control.displayName}}</li>
+                                        <li>Input name : <span class="badge badge-secondary">{{control.inputName}}</span></li>
+                                        <li>Display name : <span class="badge badge-secondary">{{control.displayName}}</span></li>
                                         <li><a href="#" @click="inspectControl(control)">Inspect</a></li>
                                     </ul>
                                 </details>
