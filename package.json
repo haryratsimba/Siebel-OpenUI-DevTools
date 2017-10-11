@@ -9,11 +9,6 @@
     "author": {
         "name": "Hary RATSIMBA"
     },
-    "icons": {
-        "16": "icon16.png",
-        "48": "icon48.png",
-        "128": "icon128.png"
-    },
     "license": "MIT",
     "devDependencies": {
         "babel-core": "^6.26.0",

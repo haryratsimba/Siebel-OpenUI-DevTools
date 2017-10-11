@@ -4,6 +4,11 @@
     "version": "1.0",
     "manifest_version": 2,
     "minimum_chrome_version": "37",
+    "icons": {
+        "16": "img/icon16.png",
+        "48": "img/icon48.png",
+        "128": "img/icon128.png"
+    },
     "content_scripts": [{
         "matches": ["<all_urls>"],
         "js": ["scripts/content-script.js"],

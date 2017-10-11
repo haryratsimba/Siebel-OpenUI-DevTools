@@ -12,7 +12,7 @@ var backgroundPageConnection = chrome.runtime.connect({
     name: "panel"
 });
 
-chrome.devtools.panels.create('Siebel OpenUI', null, 'panel.html', function (panel) {
+chrome.devtools.panels.create('Siebel OpenUI', 'img/icon128.png', 'panel.html', function (panel) {
     // Keep the panel window instance when the devtools tab has focused
     panel.onShown.addListener(function (pwindow) {
         // When the panel has focused, request the SiebelApp cached object to update the view
