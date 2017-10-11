@@ -1,8 +1,5 @@
-// https://developer.chrome.com/extensions/devtools
-// https://github.com/Maluen/Backbone-Debugger/blob/master/js/background.js
-
 /*
-  NB : The background is shared between the browser tabs, therefore it
+ The background is shared between the browser tabs, therefore it
  identifies the various panel communication ports by using the id of the
  tab they belong to.
 
