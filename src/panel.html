@@ -19,7 +19,7 @@
                             <div class="panel-header">
                                 <h2>Applets</h2>
                             </div>
-                            <div class="panel-applet">
+                            <div>
                                 <input type="text" v-model="appletQuery" class="form-control" placeholder="Search by id, eg: S_A1">
                                 <div>
                                     <details v-for="applet in filteredApplets">
@@ -44,8 +44,9 @@
                             <div class="panel-header">
                                 <h2>Controls</h2>
                             </div>
+                            <input type="text" v-model="controlQuery" class="form-control" placeholder="Search by inputName or label, eg: s_1_1_1_0">
                             <div>
-                                <details v-for="control in controls">
+                                <details v-for="control in filteredControls">
                                     <summary>{{control.name}}</summary>
                                     <ul>
                                         <li>Input name : <span class="badge badge-secondary">{{control.inputName}}</span></li>

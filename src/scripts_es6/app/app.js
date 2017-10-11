@@ -48,6 +48,19 @@ window.PanelApp = new(function() {
                             }
                         }
                         return filtered;
+                    },
+                    filteredControls() {
+                        let filtered = [];
+                        if(this.controlQuery.trim().length > 0) {
+                            for (let [controlName, control] of Object.entries(this.controls)) {
+                                if ((control.inputName.toUpperCase() + control.fieldName.toUpperCase()).includes(this.controlQuery.toUpperCase())) {
+                                    filtered.push(control);
+                                }
+                            }
+                        } else if(this.controls) {
+                            filtered = Object.values(this.controls);
+                        }
+                        return filtered;
                     }
                 }
             });

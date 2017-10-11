@@ -29,11 +29,11 @@ body,
     color: #4B77BE;
 }
 
-.panel-applet input {
+input {
     margin-bottom: 10px;
 }
 
-.panel-applet input::-webkit-input-placeholder {
+input::-webkit-input-placeholder {
    font-style: italic;
 }
 

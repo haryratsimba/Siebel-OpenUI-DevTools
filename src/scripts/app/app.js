@@ -76,6 +76,42 @@ window.PanelApp = new function () {
                         }
 
                         return filtered;
+                    },
+                    filteredControls: function filteredControls() {
+                        var filtered = [];
+                        if (this.controlQuery.trim().length > 0) {
+                            var _iteratorNormalCompletion2 = true;
+                            var _didIteratorError2 = false;
+                            var _iteratorError2 = undefined;
+
+                            try {
+                                for (var _iterator2 = Object.entries(this.controls)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                                    var _step2$value = _slicedToArray(_step2.value, 2),
+                                        controlName = _step2$value[0],
+                                        control = _step2$value[1];
+
+                                    if ((control.inputName.toUpperCase() + control.fieldName.toUpperCase()).includes(this.controlQuery.toUpperCase())) {
+                                        filtered.push(control);
+                                    }
+                                }
+                            } catch (err) {
+                                _didIteratorError2 = true;
+                                _iteratorError2 = err;
+                            } finally {
+                                try {
+                                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                                        _iterator2.return();
+                                    }
+                                } finally {
+                                    if (_didIteratorError2) {
+                                        throw _iteratorError2;
+                                    }
+                                }
+                            }
+                        } else if (this.controls) {
+                            filtered = Object.values(this.controls);
+                        }
+                        return filtered;
                     }
                 }
             });
