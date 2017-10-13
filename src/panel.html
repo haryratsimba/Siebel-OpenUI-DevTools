@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Siebel OpenUI devtools</title>
     <link rel="stylesheet" href="css/lib/bootstrap.min.css">
+    <link rel="stylesheet" href="css/lib/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/main.css">
 </head>
 
@@ -26,8 +27,8 @@
                                         <summary>{{applet.name}}</summary>
                                         <ul>
                                             <li>FullId : <span class="badge badge-primary">#{{applet.fullId}}</span></li>
-                                            <li><a href="#" @click="displayAppletControls(applet)">See controls</a></li>
-                                            <li><a href="#" @click="inspectApplet(applet)">Inspect</a></li>
+                                            <li><a href="#" @click="displayAppletControls(applet)"><span class="oi oi-list"></span> See controls</a></li>
+                                            <li><a href="#" @click="inspectApplet(applet)"><span class="oi oi-magnifying-glass"></span>&nbsp;Inspect</a></li>
                                         </ul>
                                     </details>
                                 </div>
@@ -51,7 +52,7 @@
                                     <ul>
                                         <li>Input name : <span class="badge badge-secondary">{{control.inputName}}</span></li>
                                         <li>Display name : <span class="badge badge-secondary">{{control.displayName}}</span></li>
-                                        <li><a href="#" @click="inspectControl(control)">Inspect</a></li>
+                                        <li><a href="#" @click="inspectControl(control)"><span class="oi oi-magnifying-glass"></span>&nbsp;Inspect</a></li>
                                     </ul>
                                 </details>
                             </div>
