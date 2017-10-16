@@ -10,6 +10,14 @@ Features
     * Controls
 * Inspect Applet or a Control HTML element
 
+![OpenUI devtools](./src/img/screenshot.png "OpenUI devtools")
+
+Installing from the Web Store
+-----------------------------
+https://chrome.google.com/webstore/detail/siebel-openui-devtools/olcgheplggcilliajjdpnfiggndhlphj
+
+This is the recommended method as you will have the latest stable release.
+
 Install from source
 -------------------
 Using Google Chrome:
@@ -19,3 +27,7 @@ Using Google Chrome:
 * Click on "Load unpacked extension".
 * Select the extracted folder.
 * Restart the browser.
+
+License
+-------
+MIT
