@@ -1,7 +1,7 @@
 {
-    "name": "sieb-openui-devtools",
+    "name": "sieb-openui-view-explorer",
     "version": "1.0.0",
-    "description": "Siebel OpenUI devtools utility (non-official)",
+    "description": "Siebel OpenUI DevTools utility to explore application views",
     "main": "gulpfile.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
