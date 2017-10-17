@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img src="https://raw.githubusercontent.com/haryratsimba/Siebel-OpenUI-DevTools/master/src/img/banner.png" alt="Siebel OpenUI view explorer">
+    <img src="https://raw.githubusercontent.com/haryratsimba/Siebel-OpenUI-DevTools/master/src/img/banner.png" width=280 alt="Siebel OpenUI view explorer">
     <br>
     Siebel OpenUI view explorer
 </p>
@@ -8,8 +8,8 @@
 
 Introduction
 ------------
-This extension, which is non-Oracle affiliated, was designed to save time during OpenUI layer developpement, specially to :
-* Avoid switching to Siebel Tools to get view informations
+This extension, whose developpement is not affiliated to Oracle, was designed to save time when working on the Siebel OpenUI layer. It aims to :
+* Avoid switching to Siebel Tools to get view components informations
 * Completement the `CTRL` + `ALT` + `V` feature
 
 As this app was developped independentely, there are many things that could be improved. Feel free to contribute !
