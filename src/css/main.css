@@ -11,6 +11,10 @@ body,
     height: 100%;
 }
 
+#app {
+    overflow: hidden;
+}
+
 .col.devtools-panel {
     max-width: 50%;
 }
