@@ -33,6 +33,12 @@ body,
     color: #4B77BE;
 }
 
+.jumbotron {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 .devtools-subpanel > #record-set-panel {
     overflow-y: auto;
     height: 80%;
