@@ -90,7 +90,7 @@ window.PanelApp = new function () {
                                         controlName = _step2$value[0],
                                         control = _step2$value[1];
 
-                                    if ((control.inputName.toUpperCase() + control.fieldName.toUpperCase()).includes(this.controlQuery.toUpperCase())) {
+                                    if ((control.inputName.toUpperCase() + control.displayName.toUpperCase()).includes(this.controlQuery.toUpperCase())) {
                                         filtered.push(control);
                                     }
                                 }
@@ -112,6 +112,15 @@ window.PanelApp = new function () {
                             filtered = Object.values(this.controls);
                         }
                         return filtered;
+                    }
+                },
+                watch: {
+                    recordSet: function recordSet(val) {
+                        var panel = document.querySelector('#record-set-panel pre code');
+                        panel.innerHTML = val;
+                        this.$nextTick(function () {
+                            return Prism.highlightElement(panel);
+                        });
                     }
                 }
             });

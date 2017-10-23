@@ -51,16 +51,23 @@ window.PanelApp = new(function() {
                     },
                     filteredControls() {
                         let filtered = [];
-                        if(this.controlQuery.trim().length > 0) {
+                        if (this.controlQuery.trim().length > 0) {
                             for (let [controlName, control] of Object.entries(this.controls)) {
-                                if ((control.inputName.toUpperCase() + control.fieldName.toUpperCase()).includes(this.controlQuery.toUpperCase())) {
+                                if ((control.inputName.toUpperCase() + control.displayName.toUpperCase()).includes(this.controlQuery.toUpperCase())) {
                                     filtered.push(control);
                                 }
                             }
-                        } else if(this.controls) {
+                        } else if (this.controls) {
                             filtered = Object.values(this.controls);
                         }
                         return filtered;
+                    }
+                },
+                watch: {
+                    recordSet: function(val) {
+                        let panel = document.querySelector('#record-set-panel pre code');
+                        panel.innerHTML = val;
+                        this.$nextTick(() => Prism.highlightElement(panel));
                     }
                 }
             });

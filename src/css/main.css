@@ -22,7 +22,7 @@ body,
 .devtools-panel .devtools-subpanel {
     height: 50%;
     overflow-y: auto;
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
 .panel-header {
@@ -31,6 +31,11 @@ body,
 
 .panel-header h2 {
     color: #4B77BE;
+}
+
+.devtools-subpanel > #record-set-panel {
+    overflow-y: auto;
+    height: 80%;
 }
 
 input {

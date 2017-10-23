@@ -7,6 +7,7 @@
     <title>Siebel OpenUI devtools</title>
     <link rel="stylesheet" href="css/lib/bootstrap.min.css">
     <link rel="stylesheet" href="css/lib/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/lib/prism.css">
     <link rel="stylesheet" href="css/main.css">
 </head>
 
@@ -60,8 +61,8 @@
                         <div class="devtools-subpanel">
                             <div class="panel-header">
                                 <h2>Record set</h2></div>
-                            <div>
-                                <pre><code>{{recordSet}}</code></pre>
+                            <div id="record-set-panel">
+                                <pre><code class="language-json">{{recordSet}}</code></pre>
                             </div>
                         </div>
                     </div>
@@ -71,6 +72,7 @@
     </div>
 
     <script src="scripts/lib/vue.js"></script>
+    <script src="scripts/lib/prism.js"></script>
     <script src="scripts/app/app.js"></script>
 </body>
 
