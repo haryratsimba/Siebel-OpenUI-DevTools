@@ -1,3 +1,9 @@
+/**
+ * This file will be bundled with components dependency into an app.js file which will be included into the panel HTML file.
+ */
+
+import App from './components/App.vue';
+
 // Export the panel app into the global window, to be accessible from the devtools script
 window.PanelApp = new(function() {
 
@@ -9,73 +15,45 @@ window.PanelApp = new(function() {
         // Keep the siebel object
         this.siebelApp = siebelApp;
 
-        if (!this.panelAppVm) {
-            this.panelAppVm = new Vue({
-                el: '#app',
-                data: populateModel({}, siebelApp),
-                methods: {
-                    displayAppletControls(applet) {
-                        this.controls = applet.controls;
-                        this.recordSet = JSON.stringify(applet.recordSet, null, 2);
-                    },
-                    inspectApplet(applet) {
-                        chrome.devtools.inspectedWindow.eval(`inspect($("#${applet.fullId}"))`, {
-                            useContentScriptContext: true
-                        });
-                    },
-                    inspectControl(control) {
-                        // Try to get the input by its name first, then by its label
-                        chrome.devtools.inspectedWindow.eval(`inspect($('${control.cssSelectors.inputName}'))`, {
-                            useContentScriptContext: true
-                        }, (result, isException) => {
-                            if (isException) {
-                                chrome.devtools.inspectedWindow.eval(`inspect($('${control.cssSelectors.fieldName}'))`, {
-                                    useContentScriptContext: true
-                                });
-                            }
-                        });
-                    }
-                },
-                computed: {
-                    appExists() {
-                        return typeof this.viewName != 'undefined';
-                    },
-                    filteredApplets() {
-                        let filtered = [];
-                        for (let [appletName, applet] of Object.entries(this.applets)) {
-                            if (applet.fullId.toUpperCase().includes(this.appletQuery.toUpperCase())) {
-                                filtered.push(applet);
-                            }
-                        }
-                        return filtered;
-                    },
-                    filteredControls() {
-                        let filtered = [];
-                        if (this.controlQuery.trim().length > 0) {
-                            for (let [controlName, control] of Object.entries(this.controls)) {
-                                if ((control.inputName.toUpperCase() + control.displayName.toUpperCase()).includes(this.controlQuery.toUpperCase())) {
-                                    filtered.push(control);
-                                }
-                            }
-                        } else if (this.controls) {
-                            filtered = Object.values(this.controls);
-                        }
-                        return filtered;
-                    }
-                },
-                watch: {
-                    recordSet: function(val) {
-                        let panel = document.querySelector('#record-set-panel pre code');
-                        panel.innerHTML = val;
-                        this.$nextTick(() => Prism.highlightElement(panel));
-                    }
+        this.panelAppVm = new Vue({
+            el: '#app',
+            // Pass to the app component using the component sieb prop
+            template: '<App :sieb="siebApp"></App>',
+            components: {
+                App
+            },
+            data: {
+                siebApp: {
+                    viewName: siebelApp.name,
+                    applets: siebelApp.applets
                 }
-            });
-        } else {
-            populateModel(this.panelAppVm, siebelApp);
-        }
+            }
+        });
 
         return this.panelAppVm;
+    };
+
+
+    /**
+     * Update the panel by updating the existing Vue instance.
+     *
+     * @param  {object} siebelApp an instance of wrappers/SiebViewWrapper.
+     */
+    this.updatePanelApp = function(siebelApp) {
+        this.siebelApp = siebelApp;
+
+        this.panelAppVm.siebApp.viewName = siebelApp.name;
+        this.panelAppVm.siebApp.applets = siebelApp.applets;
+    };
+
+
+    /**
+     * Return true if a siebelApp object already exists and is used to display the panel.
+     *
+     * @return {object} true if a siebelApp object already exists and is used to display the panel.
+     */
+    this.isViewAppExists = function() {
+        return this.siebelApp != undefined;
     };
 
     /**
@@ -86,16 +64,5 @@ window.PanelApp = new(function() {
     this.isAnotherViewApp = function(siebelApp) {
         return !this.siebelApp || siebelApp.name != this.siebelApp.name;
     };
-
-    function populateModel(model, siebelApp) {
-        model.viewName = siebelApp.name;
-        model.applets = siebelApp.applets;
-        model.controls = null;
-        model.recordSet = null;
-        model.appletQuery = '';
-        model.controlQuery = '';
-
-        return model;
-    }
 
 })();

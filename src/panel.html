@@ -12,64 +12,8 @@
 </head>
 
 <body>
-    <div id="app">
-        <template v-if="appExists">
-            <div class="container devtools-container">
-                <div class="row">
-                    <div class="col devtools-panel">
-                        <div class="devtools-subpanel">
-                            <div class="panel-header">
-                                <h2>Applets</h2>
-                            </div>
-                            <div>
-                                <input type="text" v-model="appletQuery" class="form-control" placeholder="Search by id, eg: S_A1">
-                                <div>
-                                    <details v-for="applet in filteredApplets">
-                                        <summary>{{applet.name}}</summary>
-                                        <ul>
-                                            <li>FullId : <span class="badge badge-primary">#{{applet.fullId}}</span></li>
-                                            <li><a href="#" @click="displayAppletControls(applet)"><span class="oi oi-list"></span> See controls</a></li>
-                                            <li><a href="#" @click="inspectApplet(applet)"><span class="oi oi-magnifying-glass"></span>&nbsp;Inspect</a></li>
-                                        </ul>
-                                    </details>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="devtools-subpanel">
-                            <div class="jumbotron">
-                                <h1 class="display-4">{{viewName}}</h1>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col devtools-panel">
-                        <div class="devtools-subpanel">
-                            <div class="panel-header">
-                                <h2>Controls</h2>
-                            </div>
-                            <input type="text" v-model="controlQuery" class="form-control" placeholder="Search by inputName or label, eg: s_1_1_1_0">
-                            <div>
-                                <details v-for="control in filteredControls">
-                                    <summary>{{control.name}}</summary>
-                                    <ul>
-                                        <li>Input name : <span class="badge badge-secondary">{{control.inputName}}</span></li>
-                                        <li>Display name : <span class="badge badge-secondary">{{control.displayName}}</span></li>
-                                        <li><a href="#" @click="inspectControl(control)"><span class="oi oi-magnifying-glass"></span>&nbsp;Inspect</a></li>
-                                    </ul>
-                                </details>
-                            </div>
-                        </div>
-                        <div class="devtools-subpanel">
-                            <div class="panel-header">
-                                <h2>Record set</h2></div>
-                            <div id="record-set-panel">
-                                <pre><code class="language-json">{{recordSet}}</code></pre>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </template>
-    </div>
+    <!-- App data are passed from the global Vue using data prop -->
+    <div id="app"></div>
 
     <script src="scripts/lib/vue.js"></script>
     <script src="scripts/lib/prism.js"></script>

@@ -212,14 +212,14 @@ var SiebControlWrapper = function () {
     }
 
     createClass(SiebControlWrapper, [{
-        key: "getCSSSelector",
+        key: "getCSSSelectors",
 
 
         /**
          * CSS selector which allow to target the control HTML element (ex : [name=controlName], #controlID)
          */
-        value: function getCSSSelector() {
-            this.cssSelector;
+        value: function getCSSSelectors() {
+            this.cssSelectors;
         }
     }, {
         key: "getName",
@@ -251,7 +251,10 @@ var SiebControlWrapper = function () {
             wrapper.inputName = siebAppControl.GetInputName();
             wrapper.fieldName = siebAppControl.GetFieldName();
 
-            wrapper.cssSelector = "[name=\"" + wrapper.inputName + "\"], [aria-label=\"" + wrapper.displayName + "\"]";
+            wrapper.cssSelectors = {
+                inputName: "[name=\"" + wrapper.inputName + "\"]",
+                fieldName: "[aria-label=\"" + wrapper.displayName + "\"]"
+            };
 
             return wrapper;
         }
@@ -409,74 +412,110 @@ var SiebViewWrapper = function () {
 }();
 
 /**
- * Number of attempt to test if the SiebelApp is on the global context, before loading the extension.
+ * Listen for View changes and send a Siebel app wrapper to the content-script using DOM events.
+ * In fact, its not possible to send objects which contains a window instance for security reasons,
+ * thats why it send a wrapper of the Siebel app.
  */
-var NB_LOADING_ATTEMPT = 5;
+var ClientListener = new function () {
 
-/**
- * Delay in ms between each attempt loading.
- */
-var ATTEMPT_LOADING_INTERVAL = 500;
+    /**
+     * Number of attempt to test if the SiebelApp is on the global context, before loading the extension.
+     */
+    var MAX_LOADING_ATTEMPT = 5;
 
-// Because the content script has no access to page global variables, this script is injected
-// to get the Siebel global variable and pass it as an DOM event since content page and script share the DOM access.
+    /**
+     * Delay in ms between each attempt loading.
+     */
+    var ATTEMPT_LOADING_INTERVAL = 500;
 
-window.addEventListener('load', function () {
-    retrieveSiebelAppOnLoad();
+    /**
+     * Element selector on which a custom event will be sent.
+     * Injected script and content script communicate through DOM events as their share the same DOM access.
+     */
+    var MESSAGING_EVENT_TARGET_SELECTOR = '#_sweview';
 
-    observeSWEViewDOMMutations(retrieveSiebelAppOnLoad);
-});
+    /**
+     * Element which will be observed in order to detect view changes.
+     */
+    var SIEB_DOM_OBSERVABLE_SELECTOR = '#_sweview';
 
-/**
- * Try to retrieve the SiebelApp object if loaded and emmit a custom onSiebAppLoaded event if loaded.
- */
-function retrieveSiebelAppOnLoad() {
-    var loadingAttempt = 0;
+    // Because the content script has no access to page global variables, this script is injected
+    // to get the Siebel global variable and pass it as an DOM event since content page and script share the DOM access.
+    this.initialize = function () {
+        var _this = this;
 
-    var id = setInterval(function () {
-        var activeView = SiebelApp.S_App.GetActiveView() || window.SiebelApp.S_App.GetActiveView();
-
-        if (activeView || ++loadingAttempt > NB_LOADING_ATTEMPT) {
-            clearInterval(id);
-
-            var activeViewWrapper = SiebViewWrapper.wrap(activeView);
-
-            var siebAppLoadedEvent = new CustomEvent('onSiebAppLoaded', {
-                detail: activeViewWrapper
-            });
-
-            document.getElementById('_sweview').dispatchEvent(siebAppLoadedEvent);
-        }
-    }, ATTEMPT_LOADING_INTERVAL);
-}
-
-/**
- * Observe DOM mutations on the #_sweview element. If updated, emmit a custom onSiebAppLoaded event
- * with the update SiebelApp object.
- */
-function observeSWEViewDOMMutations(onSWEViewMutation) {
-    var observer = new MutationObserver(function (mutations) {
-        console.log('mutation');
-        mutations.forEach(function (mutation) {
-            if (mutation.addedNodes && mutation.addedNodes.length > 0) {
-                console.log('mutation, shoud dispatch an event');
-
-                onSWEViewMutation.apply();
-
-                return false;
-            }
+        window.addEventListener('load', function () {
+            _this.listenToSiebelLoad();
+            _this.listenToSWEViewUpdate();
         });
-    });
+    };
 
-    console.log('observe');
-    console.log('sweview : ', document.getElementById('_sweview'));
+    this.listenToSiebelLoad = async function () {
+        try {
+            var activeView = await getSiebelApp();
 
-    observer.observe(document.getElementById('_sweview'), {
-        attributes: true,
-        childList: true
-    });
-}
+            this.sendEventToContentScript(activeView);
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    this.listenToSWEViewUpdate = async function () {
+        var _this2 = this;
+
+        var observer = new MutationObserver(async function (mutations) {
+            var activeView = await getSiebelApp();
+            _this2.sendEventToContentScript(activeView);
+        });
+
+        var sweDOM = await getSWEDOM();
+        observer.observe(sweDOM, {
+            attributes: true,
+            childList: true
+        });
+    };
+
+    this.sendEventToContentScript = function (data) {
+        var clientEvent = new CustomEvent('onSiebAppLoaded', {
+            detail: data
+        });
+
+        document.querySelector(MESSAGING_EVENT_TARGET_SELECTOR).dispatchEvent(clientEvent);
+    };
+
+    this.initialize();
+
+    function getSiebelApp() {
+        return new Promise(function (resolve, reject) {
+            var id = setInterval(function () {
+                var loadingAttempt = 0;
+                var activeView = 'SiebelApp' in window && SiebelApp.S_App.GetActiveView();
+
+                if (loadingAttempt++ > MAX_LOADING_ATTEMPT) {
+                    reject(Error("Couldn't retrive SiebelApp object"));
+                } else if (activeView) {
+                    clearInterval(id);
+                    resolve(SiebViewWrapper.wrap(activeView));
+                }
+            }, ATTEMPT_LOADING_INTERVAL);
+        });
+    }
+
+    function getSWEDOM() {
+        return new Promise(function (resolve, reject) {
+            var id = setInterval(function () {
+                var loadingAttempt = 0;
+                var sweElement = document.querySelector(SIEB_DOM_OBSERVABLE_SELECTOR);
+
+                if (loadingAttempt++ > MAX_LOADING_ATTEMPT) {
+                    reject(Error('Couldnt retrive ' + SIEB_DOM_OBSERVABLE_SELECTOR));
+                } else if (sweElement) {
+                    clearInterval(id);
+                    resolve(sweElement);
+                }
+            }, ATTEMPT_LOADING_INTERVAL);
+        });
+    }
+}();
 
 }());
-
-//# sourceMappingURL=inject-siebel-capture.js.map
