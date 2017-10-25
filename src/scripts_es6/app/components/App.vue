@@ -11,14 +11,15 @@
                             <div>
                                 <input type="text" v-model="appletQuery" class="form-control" placeholder="Search by id, eg: S_A1">
                                 <div>
-                                    <details v-for="applet in filteredApplets">
-                                        <summary>{{applet.name}}</summary>
-                                        <ul>
-                                            <li>FullId : <span class="badge badge-primary">#{{applet.fullId}}</span></li>
-                                            <li><a href="#" @click="displayAppletControls(applet)"><span class="oi oi-list"></span> See controls</a></li>
-                                            <li><a href="#" @click="inspectApplet(applet)"><span class="oi oi-magnifying-glass"></span>&nbsp;Inspect</a></li>
-                                        </ul>
-                                    </details>
+                                    <app-collapse-group>
+                                        <app-collapse-item v-for="applet in filteredApplets" :summary="applet.name">
+                                            <ul>
+                                                <li>FullId : <span class="badge badge-primary">#{{applet.fullId}}</span></li>
+                                                <li><a href="#" @click="displayAppletControls(applet)"><span class="oi oi-list"></span> See controls</a></li>
+                                                <li><a href="#" @click="inspectApplet(applet)"><span class="oi oi-magnifying-glass"></span>&nbsp;Inspect</a></li>
+                                            </ul>
+                                        </app-collapse-item>
+                                    </app-collapse-group>
                                 </div>
                             </div>
                         </div>
@@ -33,22 +34,25 @@
                             <div class="panel-header">
                                 <h2>Controls</h2>
                             </div>
-                            <input type="text" v-model="controlQuery" class="form-control" placeholder="Search by inputName or label, eg: s_1_1_1_0">
-                            <div>
-                                <details v-for="control in filteredControls">
-                                    <summary>{{control.name}}</summary>
-                                    <ul>
-                                        <li>Input name : <span class="badge badge-secondary">{{control.inputName}}</span></li>
-                                        <li>Display name : <span class="badge badge-secondary">{{control.displayName}}</span></li>
-                                        <li><a href="#" @click="inspectControl(control)"><span class="oi oi-magnifying-glass"></span>&nbsp;Inspect</a></li>
-                                    </ul>
-                                </details>
+                            <div v-show="controls">
+                                <input type="text" v-model="controlQuery" class="form-control" placeholder="Search by inputName or label, eg: s_1_1_1_0">
+                                <div>
+                                    <app-collapse-group>
+                                        <app-collapse-item v-for="control in filteredControls" :summary="control.name">
+                                            <ul>
+                                                <li>Input name : <span class="badge badge-secondary">{{control.inputName}}</span></li>
+                                                <li>Display name : <span class="badge badge-secondary">{{control.displayName}}</span></li>
+                                                <li><a href="#" @click="inspectControl(control)"><span class="oi oi-magnifying-glass"></span>&nbsp;Inspect</a></li>
+                                            </ul>
+                                        </app-collapse-item>
+                                    </app-collapse-group>
+                                </div>
                             </div>
                         </div>
                         <div class="devtools-subpanel">
                             <div class="panel-header">
                                 <h2>Record set</h2></div>
-                            <div id="record-set-panel">
+                            <div id="record-set-panel" v-show="recordSet">
                                 <pre><code class="language-json">{{recordSet}}</code></pre>
                             </div>
                         </div>
@@ -60,8 +64,12 @@
 </template>
 
 <script>
-export default {
-    name: 'app',
+import Collapse from './Collapse.vue';
+
+export default Vue.component('app', {
+    components: {
+        Collapse
+    },
     props: {
         sieb: {
             type: Object,
@@ -148,5 +156,5 @@ export default {
             this.$nextTick(() => Prism.highlightElement(panel));
         }
     }
-}
+});
 </script>

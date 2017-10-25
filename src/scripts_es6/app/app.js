@@ -17,11 +17,11 @@ window.PanelApp = new(function() {
 
         this.panelAppVm = new Vue({
             el: '#app',
-            // Pass to the app component using the component sieb prop
-            template: '<App :sieb="siebApp"></App>',
             components: {
                 App
             },
+            // Pass to the app component using the component sieb prop
+            template: '<app :sieb="siebApp"></app>',
             data: {
                 siebApp: {
                     viewName: siebelApp.name,

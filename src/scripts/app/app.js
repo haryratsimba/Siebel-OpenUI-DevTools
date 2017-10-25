@@ -1,6 +1,72 @@
 (function () {
 'use strict';
 
+/**
+ * Custom component which act as a container element for the <app-collapse-item>
+ * component, to display only one component item detail at a time (and collapse other components).
+ */
+var Collapse = Vue.component('app-collapse-group', { render: function render() {
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "app-collapse-group" }, [_vm._t("default")], 2);
+    }, staticRenderFns: [],
+    components: {
+        CollapseItem: CollapseItem
+    },
+    data: function data() {
+        // Shared event bus as child components are included using slots
+        return {
+            eventBus: new Vue()
+        };
+    },
+    created: function created() {
+        var _this = this;
+
+        this.eventBus.$on('item-toggle', function (el) {
+            _this.eventBus.$emit('items-collapse', el);
+        });
+    }
+});
+
+/**
+ * <app-collapse-item> is used to display an item whose content could be
+ * collapsed. It is used along with <app-collapse-group> as a child component
+ * if only one item must be displayed each time. Its behavior is similar to the HTML <details> element.
+ */
+var CollapseItem = Vue.component('app-collapse-item', {
+    props: {
+        summary: {
+            type: String,
+            required: true
+        }
+    },
+    data: function data() {
+        return {
+            isOpen: false
+        };
+    },
+
+    template: '\n    <div class="app-collapse-item">\n        <div class="item-summary"><a href="#" @click="onSummaryClick">{{summary}}</a></div>\n        <div v-show="isOpen" class="item-detail">\n            <slot></slot>\n        </div>\n    </div>\n    ',
+    created: function created() {
+        var _this2 = this;
+
+        this.$parent.eventBus.$on('items-collapse', function (el) {
+            // When an item has been toggle, close other components
+            if (!(_this2.$el === el)) {
+                _this2.isOpen = false;
+            }
+        });
+    },
+
+    methods: {
+        onSummaryClick: function onSummaryClick() {
+            // Emit an event to parent component with the toggle HTML element
+            this.isOpen = !this.isOpen;
+            if (this.isOpen) {
+                this.$parent.eventBus.$emit('item-toggle', this.$el);
+            }
+        }
+    }
+});
+
 var asyncGenerator = function () {
   function AwaitValue(value) {
     this.value = value;
@@ -186,26 +252,26 @@ var slicedToArray = function () {
   };
 }();
 
-var App = { render: function render() {
+var App = Vue.component('app', { render: function render() {
         var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { attrs: { "id": "app" } }, [_vm.appExists ? [_c('div', { staticClass: "container devtools-container" }, [_c('div', { staticClass: "row" }, [_c('div', { staticClass: "col devtools-panel" }, [_c('div', { staticClass: "devtools-subpanel" }, [_vm._m(0), _vm._v(" "), _c('div', [_c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.appletQuery, expression: "appletQuery" }], staticClass: "form-control", attrs: { "type": "text", "placeholder": "Search by id, eg: S_A1" }, domProps: { "value": _vm.appletQuery }, on: { "input": function input($event) {
                     if ($event.target.composing) {
                         return;
                     }_vm.appletQuery = $event.target.value;
-                } } }), _vm._v(" "), _c('div', _vm._l(_vm.filteredApplets, function (applet) {
-            return _c('details', [_c('summary', [_vm._v(_vm._s(applet.name))]), _vm._v(" "), _c('ul', [_c('li', [_vm._v("FullId : "), _c('span', { staticClass: "badge badge-primary" }, [_vm._v("#" + _vm._s(applet.fullId))])]), _vm._v(" "), _c('li', [_c('a', { attrs: { "href": "#" }, on: { "click": function click($event) {
+                } } }), _vm._v(" "), _c('div', [_c('app-collapse-group', _vm._l(_vm.filteredApplets, function (applet) {
+            return _c('app-collapse-item', { attrs: { "summary": applet.name } }, [_c('ul', [_c('li', [_vm._v("FullId : "), _c('span', { staticClass: "badge badge-primary" }, [_vm._v("#" + _vm._s(applet.fullId))])]), _vm._v(" "), _c('li', [_c('a', { attrs: { "href": "#" }, on: { "click": function click($event) {
                         _vm.displayAppletControls(applet);
                     } } }, [_c('span', { staticClass: "oi oi-list" }), _vm._v(" See controls")])]), _vm._v(" "), _c('li', [_c('a', { attrs: { "href": "#" }, on: { "click": function click($event) {
                         _vm.inspectApplet(applet);
                     } } }, [_c('span', { staticClass: "oi oi-magnifying-glass" }), _vm._v(" Inspect")])])])]);
-        }))])]), _vm._v(" "), _c('div', { staticClass: "devtools-subpanel" }, [_c('div', { staticClass: "jumbotron" }, [_c('h1', { staticClass: "display-4" }, [_vm._v(_vm._s(_vm.viewName))])])])]), _vm._v(" "), _c('div', { staticClass: "col devtools-panel" }, [_c('div', { staticClass: "devtools-subpanel" }, [_vm._m(1), _vm._v(" "), _c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.controlQuery, expression: "controlQuery" }], staticClass: "form-control", attrs: { "type": "text", "placeholder": "Search by inputName or label, eg: s_1_1_1_0" }, domProps: { "value": _vm.controlQuery }, on: { "input": function input($event) {
+        }))], 1)])]), _vm._v(" "), _c('div', { staticClass: "devtools-subpanel" }, [_c('div', { staticClass: "jumbotron" }, [_c('h1', { staticClass: "display-4" }, [_vm._v(_vm._s(_vm.viewName))])])])]), _vm._v(" "), _c('div', { staticClass: "col devtools-panel" }, [_c('div', { staticClass: "devtools-subpanel" }, [_vm._m(1), _vm._v(" "), _c('div', { directives: [{ name: "show", rawName: "v-show", value: _vm.controls, expression: "controls" }] }, [_c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.controlQuery, expression: "controlQuery" }], staticClass: "form-control", attrs: { "type": "text", "placeholder": "Search by inputName or label, eg: s_1_1_1_0" }, domProps: { "value": _vm.controlQuery }, on: { "input": function input($event) {
                     if ($event.target.composing) {
                         return;
                     }_vm.controlQuery = $event.target.value;
-                } } }), _vm._v(" "), _c('div', _vm._l(_vm.filteredControls, function (control) {
-            return _c('details', [_c('summary', [_vm._v(_vm._s(control.name))]), _vm._v(" "), _c('ul', [_c('li', [_vm._v("Input name : "), _c('span', { staticClass: "badge badge-secondary" }, [_vm._v(_vm._s(control.inputName))])]), _vm._v(" "), _c('li', [_vm._v("Display name : "), _c('span', { staticClass: "badge badge-secondary" }, [_vm._v(_vm._s(control.displayName))])]), _vm._v(" "), _c('li', [_c('a', { attrs: { "href": "#" }, on: { "click": function click($event) {
+                } } }), _vm._v(" "), _c('div', [_c('app-collapse-group', _vm._l(_vm.filteredControls, function (control) {
+            return _c('app-collapse-item', { attrs: { "summary": control.name } }, [_c('ul', [_c('li', [_vm._v("Input name : "), _c('span', { staticClass: "badge badge-secondary" }, [_vm._v(_vm._s(control.inputName))])]), _vm._v(" "), _c('li', [_vm._v("Display name : "), _c('span', { staticClass: "badge badge-secondary" }, [_vm._v(_vm._s(control.displayName))])]), _vm._v(" "), _c('li', [_c('a', { attrs: { "href": "#" }, on: { "click": function click($event) {
                         _vm.inspectControl(control);
                     } } }, [_c('span', { staticClass: "oi oi-magnifying-glass" }), _vm._v(" Inspect")])])])]);
-        }))]), _vm._v(" "), _c('div', { staticClass: "devtools-subpanel" }, [_vm._m(2), _vm._v(" "), _c('div', { attrs: { "id": "record-set-panel" } }, [_c('pre', [_c('code', { staticClass: "language-json" }, [_vm._v(_vm._s(_vm.recordSet))])])])])])])])] : _vm._e()], 2);
+        }))], 1)])]), _vm._v(" "), _c('div', { staticClass: "devtools-subpanel" }, [_vm._m(2), _vm._v(" "), _c('div', { directives: [{ name: "show", rawName: "v-show", value: _vm.recordSet, expression: "recordSet" }], attrs: { "id": "record-set-panel" } }, [_c('pre', [_c('code', { staticClass: "language-json" }, [_vm._v(_vm._s(_vm.recordSet))])])])])])])])] : _vm._e()], 2);
     }, staticRenderFns: [function () {
         var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "panel-header" }, [_c('h2', [_vm._v("Applets")])]);
     }, function () {
@@ -213,7 +279,9 @@ var App = { render: function render() {
     }, function () {
         var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "panel-header" }, [_c('h2', [_vm._v("Record set")])]);
     }],
-    name: 'app',
+    components: {
+        Collapse: Collapse
+    },
     props: {
         sieb: {
             type: Object,
@@ -239,17 +307,17 @@ var App = { render: function render() {
             this.recordSet = JSON.stringify(applet.recordSet, null, 2);
         },
         inspectApplet: function inspectApplet(applet) {
-            chrome.devtools.inspectedWindow.eval("inspect($(\"#" + applet.fullId + "\"))", {
+            chrome.devtools.inspectedWindow.eval('inspect($("#' + applet.fullId + '"))', {
                 useContentScriptContext: true
             });
         },
         inspectControl: function inspectControl(control) {
             // Try to get the input by its name first, then by its label
-            chrome.devtools.inspectedWindow.eval("inspect($('" + control.cssSelectors.inputName + "'))", {
+            chrome.devtools.inspectedWindow.eval('inspect($(\'' + control.cssSelectors.inputName + '\'))', {
                 useContentScriptContext: true
             }, function (result, isException) {
                 if (isException) {
-                    chrome.devtools.inspectedWindow.eval("inspect($('" + control.cssSelectors.fieldName + "'))", {
+                    chrome.devtools.inspectedWindow.eval('inspect($(\'' + control.cssSelectors.fieldName + '\'))', {
                         useContentScriptContext: true
                     });
                 }
@@ -351,7 +419,7 @@ var App = { render: function render() {
             });
         }
     }
-};
+});
 
 /**
  * This file will be bundled with components dependency into an app.js file which will be included into the panel HTML file.
@@ -370,11 +438,11 @@ window.PanelApp = new function () {
 
         this.panelAppVm = new Vue({
             el: '#app',
-            // Pass to the app component using the component sieb prop
-            template: '<App :sieb="siebApp"></App>',
             components: {
                 App: App
             },
+            // Pass to the app component using the component sieb prop
+            template: '<app :sieb="siebApp"></app>',
             data: {
                 siebApp: {
                     viewName: siebelApp.name,
