@@ -1,7 +1,6 @@
 /**
- * Use RollupJS to bundle content-script, background, dev-tools files with their dependencies
- * into single file, in order to avoid using requireJS on the browser. In fact, RequireJS is already used by Siebel OpenUI
- * and it could lead to conflict issues.
+ * Use RollupJS to bundle content injected script and panel app files with their dependencies
+ * into single file.
  */
 var gulp = require('gulp'),
     addsrc = require('gulp-add-src'),
@@ -58,8 +57,7 @@ gulp.task('build:content-injected-script', ['build:global'], function() {
         .pipe(gulp.dest('./src/scripts/client-listener'));
 });
 
-// rollup-plugin-includepaths: Resolve relative path and global (VueJS) imports directive
-// like : import Vue from 'vue';
+// rollup-plugin-includepaths: Resolve relative path and global (VueJS) imports directive like : import Vue from 'vue';
 var includePathOptions = {
     include: {
         'vue': '.scripts/lib/vue.js'
@@ -68,6 +66,9 @@ var includePathOptions = {
     external: ['vue']
 };
 
+/**
+ * Bundle VueJS panel app using rollup-plugin-vue.
+ */
 gulp.task('build:panel-app', ['build:global'], function() {
     gulp.src([
             './src/scripts_es6/app/app.js'
@@ -94,7 +95,7 @@ gulp.task('build:panel-app', ['build:global'], function() {
 });
 
 /*
- * Build all files : babelify + bundle
+ * Build all files : babelify + bundle.
  */
 gulp.task('build', ['build:content-injected-script', 'build:panel-app']);
 
