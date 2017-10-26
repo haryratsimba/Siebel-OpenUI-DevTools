@@ -1,4 +1,4 @@
-import SiebViewWrapper from './wrappers/siebviewwrapper';
+import SiebViewWrapper from './siebviewwrapper';
 
 /**
  * Listen for View changes and send a Siebel app wrapper to the content-script using DOM events.

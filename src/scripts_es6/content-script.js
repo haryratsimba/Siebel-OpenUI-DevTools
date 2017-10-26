@@ -17,7 +17,7 @@ const ContentScript = new(function() {
      */
     this.injectScript = function() {
         let script = document.createElement('script');
-        script.setAttribute('src', chrome.extension.getURL('scripts/client-listener.js'));
+        script.setAttribute('src', chrome.extension.getURL('scripts/client-listener/client-listener.js'));
         document.body.appendChild(script);
     };
 

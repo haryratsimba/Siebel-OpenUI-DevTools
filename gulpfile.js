@@ -5,11 +5,12 @@
  */
 var gulp = require('gulp'),
     addsrc = require('gulp-add-src'),
-    sourcemaps = require('gulp-sourcemaps'),
     babel = require('gulp-babel'),
     rollupBabel = require('rollup-plugin-babel'),
     rollup = require('gulp-rollup'),
-    zip = require('gulp-zip');
+    zip = require('gulp-zip'),
+    vue = require('rollup-plugin-vue'),
+    includePaths = require('rollup-plugin-includepaths');
 
 /*
  * Watch ES6 JS files changes.
@@ -27,24 +28,25 @@ gulp.task('build:global', function() {
             presets: ['es2015']
         }))
         /* Don't babelify lib folder */
-        .pipe(addsrc(['./src/scripts_es6/lib/**'], { base: './src/scripts_es6/'}))
+        .pipe(addsrc(['./src/scripts_es6/lib/**'], {
+            base: './src/scripts_es6/'
+        }))
         .on('error', console.error.bind(console))
         .pipe(gulp.dest('./src/scripts'));
 });
 
 /*
- * Bundle the injected + content-script with dependencies using rollupjs, into a single file provided in the manifest.
+ * Bundle the content injected script with dependencies using rollupjs, into a single file provided in the manifest.
  */
 gulp.task('build:content-injected-script', ['build:global'], function() {
     gulp.src([
-            './src/scripts_es6/client-listener.js'
+            './src/scripts_es6/client-listener/client-listener.js'
         ])
-        .pipe(sourcemaps.init())
         .pipe(rollup({
             /* Fix the filepath does not exist in the hypothetical filesystem issue
              https://github.com/rollup/rollup/issues/772#issuecomment-231299803 */
             allowRealFiles: true,
-            input: './src/scripts_es6/client-listener.js',
+            input: './src/scripts_es6/client-listener/client-listener.js',
             plugins: [
                 rollupBabel({
                     exclude: 'node_modules/**',
@@ -53,14 +55,48 @@ gulp.task('build:content-injected-script', ['build:global'], function() {
             ],
             format: 'iife'
         }))
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('./src/scripts'));
+        .pipe(gulp.dest('./src/scripts/client-listener'));
+});
+
+// rollup-plugin-includepaths: Resolve relative path and global (VueJS) imports directive
+// like : import Vue from 'vue';
+var includePathOptions = {
+    include: {
+        'vue': '.scripts/lib/vue.js'
+    },
+    // Exclude vue src from being bundled into app.js. vue lib will be imported from the HTML, using a script tag
+    external: ['vue']
+};
+
+gulp.task('build:panel-app', ['build:global'], function() {
+    gulp.src([
+            './src/scripts_es6/app/app.js'
+        ])
+        .pipe(rollup({
+            allowRealFiles: true,
+            input: './src/scripts_es6/app/app.js',
+            globals: {
+                'vue': 'Vue',
+            },
+            plugins: [
+                vue({
+                    compileTemplate: true
+                }),
+                includePaths(includePathOptions),
+                rollupBabel({
+                    exclude: 'node_modules/**',
+                    presets: ['es2015-rollup'],
+                })
+            ],
+            format: 'iife'
+        }))
+        .pipe(gulp.dest('./src/scripts/app'));
 });
 
 /*
  * Build all files : babelify + bundle
  */
-gulp.task('build', ['build:content-injected-script']);
+gulp.task('build', ['build:content-injected-script', 'build:panel-app']);
 
 /*
  * Package the src in the src/dist/ folder.

@@ -30,13 +30,14 @@ body,
 }
 
 .panel-header h2 {
-    color: #4B77BE;
+    font-size: 1.8em;
 }
 
 .jumbotron {
     position: relative;
     top: 50%;
     transform: translateY(-50%);
+    background-color: #f7f7f9;
 }
 
 .devtools-subpanel > #record-set-panel {
@@ -58,4 +59,24 @@ details summary {
 
 details ul {
     margin-left: 18px;
+}
+
+.app-collapse-item {
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,.125);
+}
+
+.app-collapse-group > .app-collapse-item:not(:first-child) {
+    border-top: none;
+}
+
+.app-collapse-item .item-summary,
+.app-collapse-item .item-summary,
+.app-collapse-item .item-detail {
+    width: 100%;
+    padding: 8px 18px;
+}
+
+.app-collapse-item .item-summary {
+    background-color: #f7f7f9;
 }
