@@ -5,13 +5,13 @@
                 <div class="row">
                     <div class="col devtools-panel">
                         <div class="devtools-subpanel">
-                            <div class="panel-header">
-                                <h2>Applets</h2>
-                            </div>
-                            <div>
-                                <input type="text" v-model="appletQuery" class="form-control" placeholder="Search by id, eg: S_A1">
-                                <div>
-                                    <app-collapse-group>
+                            <div class="h-100">
+                                <div class="panel-header">
+                                    <h2>Applets</h2>
+                                </div>
+                                <div class="h-75">
+                                    <input type="text" v-model="appletQuery" class="form-control" placeholder="Search by id, eg: S_A1">
+                                    <app-collapse-group class="h-100">
                                         <app-collapse-item v-for="applet in filteredApplets" :summary="applet.name">
                                             <ul>
                                                 <li>FullId : <span class="badge badge-primary">#{{applet.fullId}}</span></li>
@@ -31,13 +31,13 @@
                     </div>
                     <div class="col devtools-panel">
                         <div class="devtools-subpanel">
-                            <div class="panel-header">
-                                <h2>Controls</h2>
-                            </div>
-                            <div v-show="controls">
-                                <input type="text" v-model="controlQuery" class="form-control" placeholder="Search by inputName or label, eg: s_1_1_1_0">
-                                <div>
-                                    <app-collapse-group>
+                            <div class="h-100">
+                                <div class="panel-header">
+                                    <h2>Controls</h2>
+                                </div>
+                                <div v-show="controls" class="h-75">
+                                    <input type="text" v-model="controlQuery" class="form-control" placeholder="Search by inputName or label, eg: s_1_1_1_0">
+                                    <app-collapse-group class="h-100">
                                         <app-collapse-item v-for="control in filteredControls" :summary="control.name">
                                             <ul>
                                                 <li>Input name : <span class="badge badge-secondary">{{control.inputName}}</span></li>
@@ -52,7 +52,7 @@
                         <div class="devtools-subpanel">
                             <div class="panel-header">
                                 <h2>Record set</h2></div>
-                            <div id="record-set-panel" v-show="recordSet">
+                            <div id="record-set-panel" class="h-75" v-show="recordSet">
                                 <pre><code class="language-json">{{recordSet}}</code></pre>
                             </div>
                         </div>

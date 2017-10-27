@@ -3,11 +3,7 @@ html, body {
     margin: 0;
 }
 
-html,
-body,
-#app,
-.container.devtools-container,
-.container.devtools-container .row {
+html, body, #app, .container.devtools-container, .container.devtools-container .row {
     height: 100%;
 }
 
@@ -21,7 +17,6 @@ body,
 
 .devtools-panel .devtools-subpanel {
     height: 50%;
-    overflow-y: auto;
     margin-top: 8px;
 }
 
@@ -40,9 +35,9 @@ body,
     background-color: #f7f7f9;
 }
 
-.devtools-subpanel > #record-set-panel {
+.devtools-subpanel #record-set-panel>pre {
     overflow-y: auto;
-    height: 80%;
+    height: 100%;
 }
 
 input {
@@ -50,7 +45,7 @@ input {
 }
 
 input::-webkit-input-placeholder {
-   font-style: italic;
+    font-style: italic;
 }
 
 details summary {
@@ -63,20 +58,35 @@ details ul {
 
 .app-collapse-item {
     background-color: #fff;
-    border: 1px solid rgba(0,0,0,.125);
+    border: 1px solid rgba(0, 0, 0, .125);
 }
 
-.app-collapse-group > .app-collapse-item:not(:first-child) {
+.app-collapse-group {
+    overflow-y: auto;
+}
+
+.app-collapse-group>.app-collapse-item:not(:first-child) {
     border-top: none;
 }
 
-.app-collapse-item .item-summary,
-.app-collapse-item .item-summary,
-.app-collapse-item .item-detail {
+.app-collapse-item .item-summary, .app-collapse-item .item-summary, .app-collapse-item .item-detail {
     width: 100%;
     padding: 8px 18px;
 }
 
 .app-collapse-item .item-summary {
     background-color: #f7f7f9;
+}
+
+*::-webkit-scrollbar {
+    height: 5px;
+    width: 5px;
+}
+
+*::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, .125);
+}
+
+*::-webkit-scrollbar-thumb {
+    background: #bcbcbc;
 }
