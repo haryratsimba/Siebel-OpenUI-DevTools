@@ -25,7 +25,7 @@
                         </div>
                         <div class="devtools-subpanel">
                             <div class="jumbotron">
-                                <h1 class="display-4">{{viewName}}</h1>
+                                <h1>{{viewName}}</h1>
                             </div>
                         </div>
                     </div>

@@ -1,7 +1,7 @@
 {
     "name": "Siebel OpenUI view explorer",
     "description": "Siebel OpenUI DevTools utility to explore application views",
-    "version": "1.0.2",
+    "version": "1.0.5",
     "manifest_version": 2,
     "minimum_chrome_version": "37",
     "icons": {
