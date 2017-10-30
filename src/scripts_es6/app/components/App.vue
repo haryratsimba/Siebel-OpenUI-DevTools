@@ -35,7 +35,7 @@
                                 <div class="panel-header">
                                     <h2>Controls</h2>
                                 </div>
-                                <div v-show="controls" class="h-75">
+                                <div v-if="controls" class="h-75">
                                     <input type="text" v-model="controlQuery" class="form-control" placeholder="Search by inputName or label, eg: s_1_1_1_0">
                                     <app-collapse-group class="h-100">
                                         <app-collapse-item v-for="control in filteredControls" :summary="control.name">
@@ -47,13 +47,29 @@
                                         </app-collapse-item>
                                     </app-collapse-group>
                                 </div>
+                                <div v-else class="h-75">
+                                    <div class="card empty-panel">
+                                        <div class="card-body">
+                                            <p><img src="img/tap.svg" alt="Applet not picked" height="60px"></p>
+                                            <p>Select an applet to view its controls</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="devtools-subpanel">
                             <div class="panel-header">
                                 <h2>Record set</h2></div>
-                            <div id="record-set-panel" class="h-75" v-show="recordSet">
+                            <div v-if="recordSet" id="record-set-panel" class="h-75">
                                 <pre><code class="language-json">{{recordSet}}</code></pre>
+                            </div>
+                            <div v-else class="h-75">
+                                <div class="card empty-panel">
+                                    <div class="card-body">
+                                        <p><img src="img/tap.svg" alt="Applet not picked" height="60px"></p>
+                                        <p>Select an applet to view its record set</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -151,9 +167,13 @@ export default Vue.component('app', {
             deep: true
         },
         recordSet(val) {
-            let panel = document.querySelector('#record-set-panel pre code');
-            panel.innerHTML = val;
-            this.$nextTick(() => Prism.highlightElement(panel));
+            this.$nextTick(()=> {
+                var panel = document.querySelector('#record-set-panel pre code');
+                if (panel) {
+                    panel.innerHTML = val;
+                    Prism.highlightElement(panel);
+                }
+           });
         }
     }
 });

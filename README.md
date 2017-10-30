@@ -39,10 +39,8 @@ Using Google Chrome:
 
 Credits
 -------
-* [Vue.js](https://vuejs.org/)
-* [Bootstrap](https://getbootstrap.com/)
-* [Ionic](https://useiconic.com/open/)
 * Rocket icon used in the banner is designed by [Squid.ink](https://www.iconfinder.com/Squid.ink) and licensed under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
+* Tap icon used in Controls / Record set panel is designed by [Iconnice](https://www.flaticon.com/authors/iconnice) and licensed under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
 
 License
 -------

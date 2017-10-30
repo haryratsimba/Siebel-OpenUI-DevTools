@@ -78,6 +78,19 @@ details ul {
     background-color: #f7f7f9;
 }
 
+.card.empty-panel {
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+    color: #7E7E7E;
+}
+
+/* Use filter to change svg color as it is imported using img tag */
+.card.empty-panel img {
+     -webkit-filter: contrast(0);
+    filter: contrast(0);
+}
+
 *::-webkit-scrollbar {
     height: 5px;
     width: 5px;

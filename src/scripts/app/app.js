@@ -263,7 +263,7 @@ var App = Vue.component('app', { render: function render() {
                     } } }, [_c('span', { staticClass: "oi oi-list" }), _vm._v(" See controls")])]), _vm._v(" "), _c('li', [_c('a', { attrs: { "href": "#" }, on: { "click": function click($event) {
                         _vm.inspectApplet(applet);
                     } } }, [_c('span', { staticClass: "oi oi-magnifying-glass" }), _vm._v(" Inspect")])])])]);
-        }))], 1)])]), _vm._v(" "), _c('div', { staticClass: "devtools-subpanel" }, [_c('div', { staticClass: "jumbotron" }, [_c('h1', [_vm._v(_vm._s(_vm.viewName))])])])]), _vm._v(" "), _c('div', { staticClass: "col devtools-panel" }, [_c('div', { staticClass: "devtools-subpanel" }, [_c('div', { staticClass: "h-100" }, [_vm._m(1), _vm._v(" "), _c('div', { directives: [{ name: "show", rawName: "v-show", value: _vm.controls, expression: "controls" }], staticClass: "h-75" }, [_c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.controlQuery, expression: "controlQuery" }], staticClass: "form-control", attrs: { "type": "text", "placeholder": "Search by inputName or label, eg: s_1_1_1_0" }, domProps: { "value": _vm.controlQuery }, on: { "input": function input($event) {
+        }))], 1)])]), _vm._v(" "), _c('div', { staticClass: "devtools-subpanel" }, [_c('div', { staticClass: "jumbotron" }, [_c('h1', [_vm._v(_vm._s(_vm.viewName))])])])]), _vm._v(" "), _c('div', { staticClass: "col devtools-panel" }, [_c('div', { staticClass: "devtools-subpanel" }, [_c('div', { staticClass: "h-100" }, [_vm._m(1), _vm._v(" "), _vm.controls ? _c('div', { staticClass: "h-75" }, [_c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.controlQuery, expression: "controlQuery" }], staticClass: "form-control", attrs: { "type": "text", "placeholder": "Search by inputName or label, eg: s_1_1_1_0" }, domProps: { "value": _vm.controlQuery }, on: { "input": function input($event) {
                     if ($event.target.composing) {
                         return;
                     }_vm.controlQuery = $event.target.value;
@@ -271,13 +271,17 @@ var App = Vue.component('app', { render: function render() {
             return _c('app-collapse-item', { attrs: { "summary": control.name } }, [_c('ul', [_c('li', [_vm._v("Input name : "), _c('span', { staticClass: "badge badge-secondary" }, [_vm._v(_vm._s(control.inputName))])]), _vm._v(" "), _c('li', [_vm._v("Display name : "), _c('span', { staticClass: "badge badge-secondary" }, [_vm._v(_vm._s(control.displayName))])]), _vm._v(" "), _c('li', [_c('a', { attrs: { "href": "#" }, on: { "click": function click($event) {
                         _vm.inspectControl(control);
                     } } }, [_c('span', { staticClass: "oi oi-magnifying-glass" }), _vm._v(" Inspect")])])])]);
-        }))], 1)])]), _vm._v(" "), _c('div', { staticClass: "devtools-subpanel" }, [_vm._m(2), _vm._v(" "), _c('div', { directives: [{ name: "show", rawName: "v-show", value: _vm.recordSet, expression: "recordSet" }], staticClass: "h-75", attrs: { "id": "record-set-panel" } }, [_c('pre', [_c('code', { staticClass: "language-json" }, [_vm._v(_vm._s(_vm.recordSet))])])])])])])])] : _vm._e()], 2);
+        }))], 1) : _c('div', { staticClass: "h-75" }, [_vm._m(2)])])]), _vm._v(" "), _c('div', { staticClass: "devtools-subpanel" }, [_vm._m(3), _vm._v(" "), _vm.recordSet ? _c('div', { staticClass: "h-75", attrs: { "id": "record-set-panel" } }, [_c('pre', [_c('code', { staticClass: "language-json" }, [_vm._v(_vm._s(_vm.recordSet))])])]) : _c('div', { staticClass: "h-75" }, [_vm._m(4)])])])])])] : _vm._e()], 2);
     }, staticRenderFns: [function () {
         var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "panel-header" }, [_c('h2', [_vm._v("Applets")])]);
     }, function () {
         var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "panel-header" }, [_c('h2', [_vm._v("Controls")])]);
     }, function () {
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "card empty-panel" }, [_c('div', { staticClass: "card-body" }, [_c('p', [_c('img', { attrs: { "src": "img/tap.svg", "alt": "Applet not picked", "height": "60px" } })]), _vm._v(" "), _c('p', [_vm._v("Select an applet to view its controls")])])]);
+    }, function () {
         var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "panel-header" }, [_c('h2', [_vm._v("Record set")])]);
+    }, function () {
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "card empty-panel" }, [_c('div', { staticClass: "card-body" }, [_c('p', [_c('img', { attrs: { "src": "img/tap.svg", "alt": "Applet not picked", "height": "60px" } })]), _vm._v(" "), _c('p', [_vm._v("Select an applet to view its record set")])])]);
     }],
     components: {
         Collapse: Collapse
@@ -412,10 +416,12 @@ var App = Vue.component('app', { render: function render() {
             deep: true
         },
         recordSet: function recordSet(val) {
-            var panel = document.querySelector('#record-set-panel pre code');
-            panel.innerHTML = val;
             this.$nextTick(function () {
-                return Prism.highlightElement(panel);
+                var panel = document.querySelector('#record-set-panel pre code');
+                if (panel) {
+                    panel.innerHTML = val;
+                    Prism.highlightElement(panel);
+                }
             });
         }
     }
